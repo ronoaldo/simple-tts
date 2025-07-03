@@ -12,7 +12,10 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	fs := http.FileServer(http.Dir("./static"))
+	http.Handle("/", fs)
+
+	http.HandleFunc("/say", func(w http.ResponseWriter, r *http.Request) {
 		say := r.URL.Query().Get("say")
 		if say == "" {
 			http.Error(w, "The 'say' query parameter is required", http.StatusBadRequest)

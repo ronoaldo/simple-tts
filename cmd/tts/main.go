@@ -3,6 +3,8 @@ package main
 
 import (
 	"context"
+	"embed"
+	"io/fs"
 	"log"
 	"net/http"
 	"os"
@@ -11,9 +13,15 @@ import (
 	"cloud.google.com/go/texttospeech/apiv1/texttospeechpb"
 )
 
+//go:embed static
+var staticFiles embed.FS
+
 func main() {
-	fs := http.FileServer(http.Dir("./static"))
-	http.Handle("/", fs)
+	staticContent, err := fs.Sub(staticFiles, "static")
+	if err != nil {
+		log.Fatal(err)
+	}
+	http.Handle("/", http.FileServer(http.FS(staticContent)))
 
 	http.HandleFunc("/say", func(w http.ResponseWriter, r *http.Request) {
 		say := r.URL.Query().Get("say")

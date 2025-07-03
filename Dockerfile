@@ -6,7 +6,7 @@ FROM golang:1.22-bookworm as builder
 WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
-COPY . .
+COPY cmd ./cmd
 
 # Build the command inside the container.
 # -o /app/server places the executable in the /app directory.

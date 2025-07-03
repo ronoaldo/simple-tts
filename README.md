@@ -31,3 +31,7 @@ This is a simple Text-to-Speech (TTS) server written in Go.
 ## Configuration
 
 *   `PORT`: The port the server listens on (default: `8080`).
+
+## Disclaimer
+
+This project was created entirely with AI assistance.

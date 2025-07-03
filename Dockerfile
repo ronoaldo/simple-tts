@@ -1,6 +1,6 @@
 # Use the official Golang image to create a build artifact.
 # This is based on Debian and sets the GOPATH to /go.
-FROM golang:1.22-bookworm as builder
+FROM golang:1.24-bookworm as builder
 
 # Copy local code to the container image.
 WORKDIR /app

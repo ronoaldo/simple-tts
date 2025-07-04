@@ -1,6 +1,9 @@
 const shortcuts = [
+    "Sim",
+    "Não",
     "Obrigado",
     "Por favor",
+    "Estou bem!",
     "Estou com sede",
     "Estou com dor"
 ];

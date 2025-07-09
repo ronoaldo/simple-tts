@@ -4,10 +4,12 @@ package main
 import (
 	"context"
 	"embed"
+	"encoding/json"
 	"io/fs"
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	texttospeech "cloud.google.com/go/texttospeech/apiv1"
 	"cloud.google.com/go/texttospeech/apiv1/texttospeechpb"
@@ -18,6 +20,7 @@ var staticFiles embed.FS
 
 type ttsClient interface {
 	SynthesizeSpeech(context.Context, *texttospeechpb.SynthesizeSpeechRequest) (*texttospeechpb.SynthesizeSpeechResponse, error)
+	ListVoices(context.Context, *texttospeechpb.ListVoicesRequest) (*texttospeechpb.ListVoicesResponse, error)
 }
 
 type realTTSClient struct {
@@ -28,8 +31,34 @@ func (c *realTTSClient) SynthesizeSpeech(ctx context.Context, req *texttospeechp
 	return c.client.SynthesizeSpeech(ctx, req)
 }
 
+func (c *realTTSClient) ListVoices(ctx context.Context, req *texttospeechpb.ListVoicesRequest) (*texttospeechpb.ListVoicesResponse, error) {
+	return c.client.ListVoices(ctx, req)
+}
+
 type server struct {
 	tts ttsClient
+}
+
+func (s *server) voicesHandler(w http.ResponseWriter, r *http.Request) {
+	req := &texttospeechpb.ListVoicesRequest{
+		LanguageCode: "pt-BR",
+	}
+	resp, err := s.tts.ListVoices(r.Context(), req)
+	if err != nil {
+		log.Printf("Failed to list voices: %v", err)
+		http.Error(w, "Failed to list voices", http.StatusInternalServerError)
+		return
+	}
+
+	var chirpVoices []*texttospeechpb.Voice
+	for _, voice := range resp.Voices {
+		if strings.Contains(strings.ToLower(voice.Name), "chirp") {
+			chirpVoices = append(chirpVoices, voice)
+		}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(chirpVoices)
 }
 
 func (s *server) sayHandler(w http.ResponseWriter, r *http.Request) {
@@ -39,13 +68,18 @@ func (s *server) sayHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	voice := r.URL.Query().Get("voice")
+	if voice == "" {
+		voice = "pt-BR-Wavenet-B"
+	}
+
 	req := &texttospeechpb.SynthesizeSpeechRequest{
 		Input: &texttospeechpb.SynthesisInput{
 			InputSource: &texttospeechpb.SynthesisInput_Text{Text: say},
 		},
 		Voice: &texttospeechpb.VoiceSelectionParams{
 			LanguageCode: "pt-BR",
-			Name:         "pt-BR-Wavenet-B",
+			Name:         voice,
 		},
 		AudioConfig: &texttospeechpb.AudioConfig{
 			AudioEncoding: texttospeechpb.AudioEncoding_MP3,
@@ -82,6 +116,7 @@ func main() {
 	}
 
 	http.HandleFunc("/say", s.sayHandler)
+	http.HandleFunc("/voices", s.voicesHandler)
 
 	port := os.Getenv("PORT")
 	if port == "" {

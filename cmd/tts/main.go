@@ -68,6 +68,11 @@ func (s *server) sayHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Add a final dot if the text doesn't end with punctuation.
+	if !strings.HasSuffix(say, ".") && !strings.HasSuffix(say, "!") && !strings.HasSuffix(say, "?") {
+		say += "."
+	}
+
 	voice := r.URL.Query().Get("voice")
 	if voice == "" {
 		voice = "pt-BR-Wavenet-B"

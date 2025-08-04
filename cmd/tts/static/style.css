@@ -1,0 +1,131 @@
+/* General Body Styles */
+body {
+    background-color: #121212;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Main container */
+.main-container {
+    max-width: 600px;
+    margin-top: 5rem;
+}
+
+/* Card styling */
+.card {
+    background-color: #1e1e1e;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.card-title {
+    text-align: center;
+    font-weight: 300;
+    letter-spacing: 1.5px;
+    color: #ffffff;
+    margin-bottom: 2rem;
+}
+
+/* Glowing border effect */
+.glowing-border {
+    position: relative;
+    border-radius: 8px;
+    padding: 2px; /* Controls the thickness of the border */
+    background: linear-gradient(90deg, #f0f, #0ff, #f0f);
+    background-size: 200% 200%;
+    animation: gradient-animation 4s ease infinite;
+}
+
+.glowing-border::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 8px;
+    background: inherit;
+    filter: blur(10px);
+    z-index: -1;
+    animation: gradient-animation 4s ease infinite;
+    background-size: 200% 200%;
+}
+
+@keyframes gradient-animation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Form controls styling */
+.form-control, .form-select {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border: 1px solid #444;
+    border-radius: 6px; /* Slightly smaller radius than the glow container */
+    padding: 1rem;
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border-color: #8a2be2; /* A shade of the accent color */
+    box-shadow: none;
+}
+
+/* Remove default Bootstrap glow */
+.form-control:focus, .form-select:focus {
+  box-shadow: none;
+}
+
+/* Primary button styling */
+.btn-primary {
+    background-color: #8a2be2; /* BlueViolet */
+    border-color: #8a2be2;
+    font-weight: bold;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    transition: background-color 0.3s, transform 0.2s;
+    width: 100%;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background-color: #9932cc; /* MediumOrchid */
+    border-color: #9932cc;
+    transform: translateY(-2px);
+}
+
+/* Shortcut buttons styling */
+.btn-shortcut {
+    background-color: #333;
+    color: #e0e0e0;
+    border: 1px solid #555;
+    border-radius: 20px; /* Pill-shaped */
+    padding: 0.5rem 1rem;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.btn-shortcut:hover {
+    background-color: #444;
+    border-color: #777;
+    color: #fff;
+}
+
+#shortcuts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+/* Custom select arrow */
+.form-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23e0e0e0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+
+/* Spinner color */
+.spinner-border {
+    color: #fff;
+}

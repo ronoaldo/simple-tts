@@ -106,7 +106,7 @@ async function loadVoices() {
 shortcuts.forEach(shortcut => {
     const button = document.createElement('button');
     button.textContent = shortcut;
-    button.classList.add('btn', 'btn-secondary', 'm-1');
+    button.classList.add('btn', 'btn-shortcut');
     button.addEventListener('click', () => {
         playAudio(shortcut);
     });

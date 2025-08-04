@@ -126,3 +126,7 @@ document.getElementById('speakBtn').addEventListener('click', () => {
 });
 
 loadVoices();
+
+document.getElementById('forceReloadBtn').addEventListener('click', () => {
+    window.location.reload(true); // true forces a reload from the server, bypassing the cache
+});

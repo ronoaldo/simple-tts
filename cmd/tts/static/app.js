@@ -14,21 +14,26 @@ const spinner = speakBtn.querySelector('.spinner-border');
 const voiceSelect = document.getElementById('voice');
 
 function playAudio(text) {
+    const shortcutButtons = shortcutsContainer.querySelectorAll('.btn-shortcut');
     speakBtn.disabled = true;
+    shortcutButtons.forEach(button => button.disabled = true);
     spinner.classList.remove('d-none');
 
     const voice = voiceSelect.value;
     const audio = new Audio(`/say?say=${encodeURIComponent(text)}&voice=${encodeURIComponent(voice)}`);
+
+    const onFinish = () => {
+        speakBtn.disabled = false;
+        shortcutButtons.forEach(button => button.disabled = false);
+        spinner.classList.add('d-none');
+    };
+
     audio.addEventListener('canplaythrough', () => {
         audio.play();
     });
-    audio.addEventListener('ended', () => {
-        speakBtn.disabled = false;
-        spinner.classList.add('d-none');
-    });
+    audio.addEventListener('ended', onFinish);
     audio.addEventListener('error', () => {
-        speakBtn.disabled = false;
-        spinner.classList.add('d-none');
+        onFinish();
         alert('Failed to play audio.');
     });
 }

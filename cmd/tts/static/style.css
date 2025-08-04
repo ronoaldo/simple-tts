@@ -1,6 +1,6 @@
 /* General Body Styles */
 body {
-    background-color: #121212;
+    background-color: #050208;
     color: #e0e0e0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -128,4 +128,18 @@ body {
 /* Spinner color */
 .spinner-border {
     color: #fff;
+}
+
+.logo {
+    width: 100%;
+    height: auto;
+    mask-image: radial-gradient(circle, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+    -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+    transform: translateY(-25%);
+}
+
+.logo-container {
+    height: 180px; /* Adjusted height */
+    overflow: hidden;
+    position: relative;
 }
